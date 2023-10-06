@@ -4,7 +4,7 @@ Week 3 Goals:
 - Create the Frontend (Sahith + Jacob)
 ----- Education Page
 ----- Model Page
-- Figure out how to link the frontend and the model (Akhil && Ayush)
+- Figure out how to link the frontend and the model (Akhil && Ayush): https://www.youtube.com/watch?v=-XirZSq6Wcs
 - Create a preliminary model (Ayush)
 - Find larger/more accurate datasets (Akhil)
 
