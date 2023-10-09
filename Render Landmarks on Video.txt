@@ -1,0 +1,149 @@
+import mediapipe as mp
+from mediapipe.tasks import python
+from mediapipe.tasks.python import vision
+from mediapipe import solutions
+from mediapipe.framework.formats import landmark_pb2
+import threading
+import cv2
+import numpy as np
+from google.colab.patches import cv2_imshow
+import math
+
+
+
+model_path = // NEED TO UPLOAD A MODEL FILE
+
+from google.colab.patches import cv2_imshow
+
+
+BaseOptions = mp.tasks.BaseOptions
+PoseLandmarker = mp.tasks.vision.PoseLandmarker
+PoseLandmarkerOptions = mp.tasks.vision.PoseLandmarkerOptions
+VisionRunningMode = mp.tasks.vision.RunningMode
+
+options = PoseLandmarkerOptions(
+    base_options=BaseOptions(model_asset_path=model_path),
+    running_mode=VisionRunningMode.VIDEO)
+
+landmarker = PoseLandmarker.create_from_options(options)
+
+
+cap = cv2.VideoCapture(// NEED TO UPLOAD A VIDEO )
+fps = max(30, cap.get(cv2.CAP_PROP_FPS))
+
+def draw_body_landmarks(frame, body_landmarks):
+
+    # print(len(body_landmarks))
+
+    for idx in range(len(body_landmarks)):
+      pose_landmarks = body_landmarks[idx]
+
+      # Draw the pose landmarks.
+      pose_landmarks_proto = landmark_pb2.NormalizedLandmarkList()
+      pose_landmarks_proto.landmark.extend([ 
+          landmark_pb2.NormalizedLandmark(x=landmark.x, y=landmark.y, z=landmark.z) for landmark in pose_landmarks
+          
+          # {
+          # if (i == 11 or i == 12 or i == 13 or i == 14 or i == 15 or i == 16):
+          #   landmark_pb2.NormalizedLandmark(x=pose_landmarks[i].x, y=pose_landmarks[i].y, z=pose_landmarks[i].z) 
+          #   }
+      ])
+
+#for i in range(11, 16)
+          
+        # landmark_pb2.NormalizedLandmark(x=landmark.x, y=landmark.y, z=landmark.z) for landmark in pose_landmarks
+
+      print(len(pose_landmarks))
+
+      solutions.drawing_utils.draw_landmarks(
+        frame,
+        pose_landmarks_proto,
+        solutions.pose.POSE_CONNECTIONS,
+        solutions.drawing_styles.get_default_pose_landmarks_style())
+      
+    return frame
+
+def process_video():
+    fps = max(30, cap.get(cv2.CAP_PROP_FPS))
+
+    while True:
+        ret, frame = cap.read()
+
+        if not ret:
+            break
+
+        timestamp_ms = int(cap.get(cv2.CAP_PROP_POS_MSEC))
+
+        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
+        pose_landmarker_result = landmarker.detect_for_video(mp_image, timestamp_ms)
+
+        if pose_landmarker_result.pose_landmarks is None or len(pose_landmarker_result.pose_landmarks) < 1:
+            continue  # skip this frame
+
+        draw_body_landmarks(frame, pose_landmarker_result.pose_landmarks)
+
+        # cv2_imshow(frame)
+
+        # If the user presses the 'q' key, break from the loop.
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+          break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+process_video()
+
+
+
+
+"""
+SHIT CODE
+ # Detect body landmarks in the video frame using MediaPipe.
+          # body_landmarks = detect_body_landmarks(frame)
+
+        # Draw body landmarks on the video frame.
+
+        # print(type(pose_landmarker_result.pose_landmarks[0][0]))
+        # def detect_body_landmarks(frame):
+#   # Initialize MediaPipe.
+#   mp_holistic = mp.solutions.holistic
+
+#   # Create a MediaPipe Holistics detector.
+#   holistics = mp_holistic.Holistic(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+
+#   # Detect body landmarks in the video frame.
+#   results = holistics.process(frame)
+
+#   # Get the body landmarks.
+#   body_landmarks = []
+#   # for landmark in results.pose_landmarks.landmark:
+
+#   #   # Get the X and Y coordinates of the landmark.
+#   #   x = landmark.x * frame.shape[1]
+#   #   y = landmark.y * frame.shape[0]
+
+#   #   # Add the landmark coordinates to the list of body landmarks.
+#   #   body_landmarks.append((x, y))
+
+#   return body_landmarks
+
+  # for body_landmark in body_landmarks:
+  #   # body_landmark = (body_landmark[0], body_landmark[1])
+  #   point1 = body_landmark[0].x
+  #   point2 = body_landmark[0].y
+  #   # point3 = body_landmark[0].z
+
+  #   print(point1, point2)
+
+  #   point1 = math.ceil(point1);
+  #   point2 = math.ceil(point2);
+
+    # center = (, )
+
+    # print(type(point1))
+
+    
+
+    # cv2.circle(frame, center , 2, (0, 0, 255), 2)
+    # Just the arm to shoulder
+"""
