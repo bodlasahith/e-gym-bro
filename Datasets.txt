@@ -3,4 +3,18 @@ Datasets to pull from:
  - https://storage.googleapis.com/openimages/web/visualizer/index.html?type=all&set=train&c=%2Fm%2F041kzs [Images]
  - https://github.com/google-deepmind/tapnet [Need to investigate this ASK SANIL!]
  - https://github.com/ParitoshParmar/Fitness-AQA#our-self-supervised-motion-disentangling-approach-for-fine-grained-action-assessment [Awaiting dataset via email]
- - Downloaded 5 Data Sets [On GitHub]
+ - https://transactions.sendowl.com/orders/133615165/download/b798567cf7c4de91a59d223e4759508a [This one's confusing]
+ - Downloaded 5 Data Sets [In Datasets Folder]
+
+
+Investigate Resources [Consult Sanil]:
+ - Datasets List: https://www.v7labs.com/blog/best-free-datasets-for-machine-learning
+ - http://web.mit.edu/torralba/www/indoor.html
+ - https://arxiv.org/abs/1609.08675
+ - https://arxiv.org/abs/1609.08675
+ - https://cloud.google.com/vision/
+ - https://blog.research.google/2016/09/show-and-tell-image-captioning-open.html
+ - https://paperswithcode.com/paper/lsun-construction-of-a-large-scale-image
+ - https://github.com/monniert/unicorn
+ - https://www.hindawi.com/journals/cin/2022/3218431/
+ - 
