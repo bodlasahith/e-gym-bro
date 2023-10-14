@@ -1,0 +1,6 @@
+Datasets to pull from:
+ - https://research.google.com/youtube8m/explore.html
+ - https://storage.googleapis.com/openimages/web/visualizer/index.html?type=all&set=train&c=%2Fm%2F041kzs [Images]
+ - https://github.com/google-deepmind/tapnet [Need to investigate this ASK SANIL!]
+ - https://github.com/ParitoshParmar/Fitness-AQA#our-self-supervised-motion-disentangling-approach-for-fine-grained-action-assessment [Awaiting dataset via email]
+ - Downloaded 5 Data Sets [On GitHub]
