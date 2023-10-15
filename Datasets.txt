@@ -17,4 +17,4 @@ Investigate Resources [Consult Sanil]:
  - https://paperswithcode.com/paper/lsun-construction-of-a-large-scale-image
  - https://github.com/monniert/unicorn
  - https://www.hindawi.com/journals/cin/2022/3218431/
- - 
+ - https://drive.google.com/drive/folders/16JWrJB-N7noUYNdZsZ_76suU_qArzzRn
