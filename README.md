@@ -1,6 +1,6 @@
 # group-project-readme
 
-Week 3 Goals: 
+Week 5 Goals: 
 - Create the Frontend (Sahith + Jacob)
 ----- Education Page
 ----- Model Page

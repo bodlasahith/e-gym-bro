@@ -58,7 +58,15 @@ RUN pip3 install absl-py numpy opencv-contrib-python protobuf==3.20.1
 RUN pip3 install six==1.14.0
 RUN pip3 install tensorflow
 RUN pip3 install tf_slim
+# streamlit deps begin
+RUN pip3 install altair
+RUN pip3 install pandas
+RUN pip3 install streamlit
+# streamlit deps end
 
+# streamlit expose port
+EXPOSE 8501
+# jacob: ^this EXPOSE feels redundant--exposes Docker to the tcp/udp port
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # Install bazel
