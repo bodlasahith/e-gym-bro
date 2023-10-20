@@ -1,107 +1,23 @@
+#Library Imports 
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 from mediapipe import solutions
 from mediapipe.framework.formats import landmark_pb2
-import threading
+
+#Core Imports
 import cv2
-import numpy as np
-# from google.colab.patches import cv2_imshow
-import math
-
-
-
-# model_path = "./PoseLandmarkerLite.task"
-
-
-
-# BaseOptions = mp.tasks.BaseOptions
-# PoseLandmarker = mp.tasks.vision.PoseLandmarker
-# PoseLandmarkerOptions = mp.tasks.vision.PoseLandmarkerOptions
-# VisionRunningMode = mp.tasks.vision.RunningMode
-
-# options = PoseLandmarkerOptions(
-#     base_options=BaseOptions(model_asset_path=model_path),
-#     running_mode=VisionRunningMode.VIDEO)
-
-# landmarker = PoseLandmarker.create_from_options(options)
-
-
-# cap = cv2.VideoCapture("./data/FrontViewGood.MOV")
-# fps = max(30, cap.get(cv2.CAP_PROP_FPS))
-
-# def draw_body_landmarks(frame, body_landmarks):
-
-#     # print(len(body_landmarks))
-
-
-#     for idx in range(len(body_landmarks)):
-#       pose_landmarks = body_landmarks[idx]
-
-#       # Draw the pose landmarks.
-#       pose_landmarks_proto = landmark_pb2.NormalizedLandmarkList()
-#       pose_landmarks_proto.landmark.extend([ 
-#           landmark_pb2.NormalizedLandmark(x=landmark.x, y=landmark.y, z=landmark.z) for landmark in pose_landmarks
-#       ])
-
-#       solutions.drawing_utils.draw_landmarks(
-#         frame,
-#         pose_landmarks_proto,
-#         solutions.pose.POSE_CONNECTIONS,
-#         solutions.drawing_styles.get_default_pose_landmarks_style())
-      
-#     return frame
-
-# def process_video():
-#     fps = max(30, cap.get(cv2.CAP_PROP_FPS))
-
-#     while True:
-#         ret, frame = cap.read()
-
-#         if not ret:
-#             break
-
-#         timestamp_ms = int(cap.get(cv2.CAP_PROP_POS_MSEC))
-
-#         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
-#         pose_landmarker_result = landmarker.detect_for_video(mp_image, timestamp_ms)
-
-#         if pose_landmarker_result.pose_landmarks is None or len(pose_landmarker_result.pose_landmarks) < 1:
-#             continue  # skip this frame
-
-#         draw_body_landmarks(frame, pose_landmarker_result.pose_landmarks)
-
-#         # cv2_imshow(frame)
-#         cv2.imshow('Video', frame)
-
-#         # If the user presses the 'q' key, break from the loop.
-#         if cv2.waitKey(1) & 0xFF == ord('q'):
-#           break
-
-#     cap.release()
-#     cv2.destroyAllWindows()
-
-# process_video()
-
-# Refactoring the code
-
-# Necessary imports
-import mediapipe as mp
-from mediapipe.tasks import python
-from mediapipe.tasks.python import vision
-from mediapipe import solutions
-from mediapipe.framework.formats import landmark_pb2
-import threading
-import cv2
-import numpy as np
 import math
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-# Compute angle function
+#streamlit
+import streamlit as st; 
+
 #turns on interactive mode
 plt.ion()
 
+#Compute Angle Function
 def compute_angle(A, B, C):
     BA = [A.x - B.x, A.y - B.y, A.z - B.z]
     BC = [C.x - B.x, C.y - B.y, C.z - B.z]
@@ -131,10 +47,10 @@ given_angles = [114.74538300788973, 117.87354131393268, 109.44801583256293, 106.
 given_timestamps = [-1, 33, 66, 100, 133, 166, 200, 233, 266, 300, 333, 366, 400, 433, 466, 500, 533, 566, 600, 633, 666, 700, 733, 766, 800, 833, 866, 900, 933, 966, 1000, 1033, 1066, 1100, 1133, 1168, 1201, 1235, 1268, 1301, 1335, 1368, 1401, 1435, 1468, 1501, 1535, 1568, 1601, 1635, 1668, 1701, 1735, 1768, 1801, 1835, 1868, 1901, 1935, 1968, 2001, 2035, 2068, 2101, 2135, 2168, 2201, 2235, 2268, 2301, 2335, 2368, 2401, 2435, 2468, 2501, 2535, 2568, 2601, 2635, 2668,
                     2701, 2735, 2768, 2801, 2835, 2868, 2901, 2935, 2968, 3001, 3035, 3068, 3101, 3135, 3168, 3201, 3235, 3268, 3301, 3335, 3368, 3401, 3435, 3470, 3503, 3536, 3570, 3603, 3636, 3670, 3703, 3736, 3770, 3803, 3836, 3870, 3903, 3936, 3970, 4003, 4036, 4070, 4103, 4136, 4170, 4203, 4236, 4270, 4303, 4336, 4370, 4403, 4436, 4470, 4503, 4536, 4570, 4603, 4636, 4670, 4703, 4736, 4770, 4803, 4836, 4870, 4903, 4936, 4970, 5003, 5036, 5070, 5103, 5136, 5170, 5203, 5236, 5270, 5303]
 
-# Update plot function
+#Initialized Plot
 fig, ax = plt.subplots(figsize=(10, 5))
 
-
+# Update plot function
 def update_plot(angles, timestamps):
     ax.clear()  # Clear the previous plot
 
@@ -180,10 +96,12 @@ def draw_body_landmarks(frame, body_landmarks):
 def processVideo(video_path):
   landmarker = PoseLandmarker.create_from_options(options)
 
+  placeholder = st.empty()  
+  
   angles = []
   timestamps = []
   cap = cv2.VideoCapture(video_path)
-  fps = max(30, cap.get(cv2.CAP_PROP_FPS))
+  # fps = max(30, cap.get(cv2.CAP_PROP_FPS))
 
   while True:
       ret, frame = cap.read()
@@ -214,9 +132,8 @@ def processVideo(video_path):
       
       draw_body_landmarks(frame, pose_landmarker_result.pose_landmarks)
 
-      cv2.imshow('Video', frame)
-      if cv2.waitKey(1) & 0xFF == ord('q'):
-          break
+      frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Convert frame to RGB
+      placeholder.image(frame_rgb, channels='RGB', caption="Video Playback", use_column_width=True)  # Update the image in the placeholder
   
   cap.release()
   cv2.destroyAllWindows()
