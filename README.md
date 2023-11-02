@@ -1,8 +1,8 @@
 # group-project-readme
 
-Week 5 Goals: 
-- Create the Frontend (Sahith + Jacob)
------ Education Page
+Week 6 Goals: 
+- Create a way to find threshold for the modle
+- Research unsupervised
 ----- Model Page
 - Figure out how to link the frontend and the model (Akhil && Ayush): https://www.youtube.com/watch?v=-XirZSq6Wcs
 - Create a preliminary model (Ayush)
