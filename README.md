@@ -10,7 +10,7 @@ Bicep Comparison Example: https://github.com/sinahajizadeh/gym_computer_vision/b
 Dataset: https://www.kaggle.com/datasets/hasyimabdillah/workoutfitness-video/data
 
 Machine Learning Model: https://developers.google.com/mediapipe/solutions/vision/pose_landmarker
- - Using MediaPOse to do keypoints 
+ - Using MediaPipe to do keypoints 
 
 Wireframes:
 https://www.figma.com/file/z6DeskJib3B4WQOenzrFJZ/E-GymBro-Website-Wireframes?type=design&node-id=0%3A1&mode=design&t=UsDnv3MsdxTML8FT-1

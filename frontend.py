@@ -3,6 +3,7 @@ import cv2
 import tempfile
 import time  # Import the time module
 import RenderLandmarksCode as model
+from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
 
 st.header("E-GymBro")
 st.markdown("A site to track your fitness gains quantitatively...")
@@ -41,6 +42,10 @@ def upload_video(uploaded_file):
     # Release the video file
     video.release()
 
+class VideoTransformer(VideoTransformerBase):
+    def transform(self, frame):
+        return frame
+
 # Upload the video file or capture a live recording
 option = st.radio("Choose an option:", ["Upload a video file", "Capture a live recording"])
 if option == "Upload a video file":
@@ -48,36 +53,9 @@ if option == "Upload a video file":
     if uploaded_file is not None:
         upload_video(uploaded_file)
 elif option == "Capture a live recording":
-    st.header("Live Recording")
-    st.write("Press the 'Start Recording' button to begin recording from your device's camera.")
+    webrtc_streamer (key="example", video_transformer_factory=VideoTransformer,)
 
-    cap = cv2.VideoCapture(0)
-
-    recording = False
-    out = None
-
-    if st.button("Start Recording"):
-        recording = True
-        fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640, 480))
-
-    while recording:
-        ret, frame = cap.read()
-        if ret:
-            out.write(frame)
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            st.image(frame_rgb, channels="RGB")
-        else:
-            break
-
-    if st.button("Stop Recording"):
-        recording = False
-        if out is not None:
-            out.release()
-
-    cap.release()
-
-st.header("Education")
+st.header("About")
 st.markdown("<h4>The Science Behind Muscle Growth</h4>", unsafe_allow_html=True)
 st.markdown("The fundmentals of muscle growth is reliant on the repetitive tearing and repairing of microscopic muscle fibers." + 
             " When lifting heavy weights, your muscle fibers are strained and torn, creating the pain and weakness you feel during a bicep curl, for instance." +
@@ -96,3 +74,7 @@ st.markdown("<h4>What We Offer</h4>", unsafe_allow_html=True)
 st.markdown("Using pose estimation with our Python algorithm, we offer you a solution to track the accuracy of your form with footage of professional bodybuilder. " +
             "By comparing your video footage and our own data, we can compare the key quantitative distinctions between your technique and that of a pro. Try the model above to see " +
             "how accurate your technique is and potentially use our prescribed feedback to improve your form! Check out our links below to learn more about bodybuilding, weightlifting, and computer vision!")
+st.header("Links")
+st.markdown("Pose estimation using Google Mediapipe --> https://developers.google.com/mediapipe")
+st.markdown("The science behind bodybuilding --> https://www.builtlean.com/muscles-grow/")
+st.markdown("Maintaining form for weighted movements --> https://www.bodybuilding.com/fun/likness25.htm")
