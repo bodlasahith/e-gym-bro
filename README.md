@@ -1,12 +1,9 @@
 # group-project-readme
 
-Week 6 Goals: 
-- Create a way to find threshold for the modle
-- Research unsupervised
------ Model Page
-- Figure out how to link the frontend and the model (Akhil && Ayush): https://www.youtube.com/watch?v=-XirZSq6Wcs
-- Create a preliminary model (Ayush)
-- Find larger/more accurate datasets (Akhil)
+Week 7 Goals: 
+- Display analysis of form in video
+- Tie up loose ends/put it all together
+- Deploy streamlit app
 
 Bicep Comparison Example: https://github.com/sinahajizadeh/gym_computer_vision/blob/main/coach.py
 
