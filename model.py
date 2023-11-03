@@ -138,4 +138,4 @@ def processVideo(video_path):
   cap.release()
   cv2.destroyAllWindows()
   
-  return {"angles": angles, "timestamps": timestamps}
+  return angles; 

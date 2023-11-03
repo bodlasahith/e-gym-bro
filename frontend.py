@@ -1,19 +1,35 @@
 import streamlit as st
-import cv2
 import tempfile
-import time  # Import the time module
-import RenderLandmarksCode as model
-from streamlit_webrtc import VideoTransformerBase, webrtc_streamer
+from sklearn.neighbors import KNeighborsClassifier
+import joblib
+import numpy as np
+import model
+import critiqueModel as critique
 
 st.header("E-GymBro")
 st.markdown("A site to track your fitness gains quantitatively...")
+
+def classify_angles(new_angles, model_filename):
+    # Load the trained model from the file
+    knn = joblib.load(model_filename)
+    
+    # Calculate features for the new set of angles
+    new_features = calculate_features(new_angles)
+    
+    # Classify the new set of angles
+    prediction = knn.predict([new_features])
+    
+    return prediction[0]
+
 
 def upload_video(uploaded_file):
     tfile = tempfile.NamedTemporaryFile(delete=False) 
     tfile.write(uploaded_file.read())
 
     video_file_path = tfile.name  # Get the file path of the temporary file
-    model.processVideo(video_path=video_file_path)
+    angles = model.processVideo(video_path=video_file_path)
+    result = critique.classify_angles(angles, 'knn_model.joblib')
+    st.write(result)
     # # Load the video file
     # video = cv2.VideoCapture(video_file_path)
 
@@ -40,20 +56,14 @@ def upload_video(uploaded_file):
     #         break
 
     # Release the video file
-    video.release()
-
-class VideoTransformer(VideoTransformerBase):
-    def transform(self, frame):
-        return frame
 
 # Upload the video file or capture a live recording
-option = st.radio("Choose an option:", ["Upload a video file", "Capture a live recording"])
-if option == "Upload a video file":
-    uploaded_file = st.file_uploader("Choose a video file", type=["mp4", "mov", "avi"])
-    if uploaded_file is not None:
-        upload_video(uploaded_file)
-elif option == "Capture a live recording":
-    webrtc_streamer (key="example", video_transformer_factory=VideoTransformer,)
+# option = st.radio("Choose an option:", ["Upload a video file", "Capture a live recording"])
+# if option == "Upload a video file":
+uploaded_file = st.file_uploader("Choose a video file", type=["mp4", "mov", "avi"])
+if uploaded_file is not None:
+    upload_video(uploaded_file)
+
 
 st.header("About")
 st.markdown("<h4>The Science Behind Muscle Growth</h4>", unsafe_allow_html=True)

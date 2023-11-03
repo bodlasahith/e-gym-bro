@@ -63,7 +63,9 @@ RUN pip3 install altair
 RUN pip3 install pandas
 RUN pip3 install streamlit
 # streamlit deps end
-
+RUN pip3 install joblib
+RUN pip3 install scikit-learn
+RUN pip3 install mediapipe
 # streamlit expose port
 EXPOSE 8501
 # jacob: ^this EXPOSE feels redundant--exposes Docker to the tcp/udp port
