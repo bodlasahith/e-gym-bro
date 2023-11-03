@@ -29,7 +29,14 @@ def upload_video(uploaded_file):
     video_file_path = tfile.name  # Get the file path of the temporary file
     angles = model.processVideo(video_path=video_file_path)
     result = critique.classify_angles(angles, 'knn_model.joblib')
-    st.write(result)
+    if result == "bad":
+        st.write("Your technique might need improvement in certain areas. Here are some things you can work on or fix.\n" +
+                "- Exectue the full range of motion (ROM) to maximize gains\n" +
+                "- Avoid leaning into the curl and keep posture upright\n" +
+                "- Keep up-and-down motion consistent without moving elbow around\n")
+        st.write("Upload a video again if you want to test your new and improved technique.")
+    else:
+        st.write("Your technique looks accurate and proper. Keep up the good work! Upload a video again if you want to test your curl technique again.")
     # # Load the video file
     # video = cv2.VideoCapture(video_file_path)
 
