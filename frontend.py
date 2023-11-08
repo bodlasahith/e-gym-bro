@@ -1,18 +1,42 @@
 import streamlit as st
-import cv2
 import tempfile
-import time  # Import the time module
-import RenderLandmarksCode as model
+from sklearn.neighbors import KNeighborsClassifier
+import joblib
+import numpy as np
+import model
+import critiqueModel as critique
 
 st.header("E-GymBro")
 st.markdown("A site to track your fitness gains quantitatively...")
+
+def classify_angles(new_angles, model_filename):
+    # Load the trained model from the file
+    knn = joblib.load(model_filename)
+    
+    # Calculate features for the new set of angles
+    new_features = calculate_features(new_angles)
+    
+    # Classify the new set of angles
+    prediction = knn.predict([new_features])
+    
+    return prediction[0]
+
 
 def upload_video(uploaded_file):
     tfile = tempfile.NamedTemporaryFile(delete=False) 
     tfile.write(uploaded_file.read())
 
     video_file_path = tfile.name  # Get the file path of the temporary file
-    model.processVideo(video_path=video_file_path)
+    angles = model.processVideo(video_path=video_file_path)
+    result = critique.classify_angles(angles, 'knn_model.joblib')
+    if result == "bad":
+        st.write("Your technique might need improvement in certain areas. Here are some things you can work on or fix.\n" +
+                "- Exectue the full range of motion (ROM) to maximize gains\n" +
+                "- Avoid leaning into the curl and keep posture upright\n" +
+                "- Keep up-and-down motion consistent without moving elbow around\n")
+        st.write("Upload a video again if you want to test your new and improved technique.")
+    else:
+        st.write("Your technique looks accurate and proper. Keep up the good work! Upload a video again if you want to test your curl technique again.")
     # # Load the video file
     # video = cv2.VideoCapture(video_file_path)
 
@@ -39,45 +63,16 @@ def upload_video(uploaded_file):
     #         break
 
     # Release the video file
-    video.release()
 
 # Upload the video file or capture a live recording
-option = st.radio("Choose an option:", ["Upload a video file", "Capture a live recording"])
-if option == "Upload a video file":
-    uploaded_file = st.file_uploader("Choose a video file", type=["mp4", "mov", "avi"])
-    if uploaded_file is not None:
-        upload_video(uploaded_file)
-elif option == "Capture a live recording":
-    st.header("Live Recording")
-    st.write("Press the 'Start Recording' button to begin recording from your device's camera.")
+# option = st.radio("Choose an option:", ["Upload a video file", "Capture a live recording"])
+# if option == "Upload a video file":
+uploaded_file = st.file_uploader("Choose a video file", type=["mp4", "mov", "avi"])
+if uploaded_file is not None:
+    upload_video(uploaded_file)
 
-    cap = cv2.VideoCapture(0)
 
-    recording = False
-    out = None
-
-    if st.button("Start Recording"):
-        recording = True
-        fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640, 480))
-
-    while recording:
-        ret, frame = cap.read()
-        if ret:
-            out.write(frame)
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            st.image(frame_rgb, channels="RGB")
-        else:
-            break
-
-    if st.button("Stop Recording"):
-        recording = False
-        if out is not None:
-            out.release()
-
-    cap.release()
-
-st.header("Education")
+st.header("About")
 st.markdown("<h4>The Science Behind Muscle Growth</h4>", unsafe_allow_html=True)
 st.markdown("The fundmentals of muscle growth is reliant on the repetitive tearing and repairing of microscopic muscle fibers." + 
             " When lifting heavy weights, your muscle fibers are strained and torn, creating the pain and weakness you feel during a bicep curl, for instance." +
@@ -96,3 +91,7 @@ st.markdown("<h4>What We Offer</h4>", unsafe_allow_html=True)
 st.markdown("Using pose estimation with our Python algorithm, we offer you a solution to track the accuracy of your form with footage of professional bodybuilder. " +
             "By comparing your video footage and our own data, we can compare the key quantitative distinctions between your technique and that of a pro. Try the model above to see " +
             "how accurate your technique is and potentially use our prescribed feedback to improve your form! Check out our links below to learn more about bodybuilding, weightlifting, and computer vision!")
+st.header("Links")
+st.markdown("Pose estimation using Google Mediapipe --> https://developers.google.com/mediapipe")
+st.markdown("The science behind bodybuilding --> https://www.builtlean.com/muscles-grow/")
+st.markdown("Maintaining form for weighted movements --> https://www.bodybuilding.com/fun/likness25.htm")
