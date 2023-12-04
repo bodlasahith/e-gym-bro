@@ -1,7 +1,7 @@
 # group-project-team88
 group-project-team88 created by GitHub Classroom
 
-Our project was building a trained ML model that detects an incorrect form when doing a workout or exercise.
+Many of us go to the gym and workout. However, there is no quantitative way to determine whether our gym form is correct. Furthermore we cannot get experienced guidance when doing different gym strokes. Egymbro is an application to solve those problems. It can take in an input video of a bicep curl and then provide advice on how to improve the curl as well as indicating whether the curl was good or bad. It provides a qualitative and quantitative way to measure your gym poses. 
 
 We used many modules & stacks including:
 - MediaPipe
